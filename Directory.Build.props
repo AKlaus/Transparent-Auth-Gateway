@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <Features>strict</Features>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <Authors>Alex Klaus</Authors>
+
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    </PropertyGroup>
+</Project>

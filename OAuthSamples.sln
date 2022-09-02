@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureADAuthClient", "AzureADAuthClient\AzureADAuthClient.csproj", "{26ED0658-DFC8-41CB-A566-30CD00DB1BD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIdDict.Server", "OpenIdDict.Server\IdentityServer.csproj", "{9F9F8F35-D7CA-43B5-AD31-8728C737F877}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26ED0658-DFC8-41CB-A566-30CD00DB1BD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26ED0658-DFC8-41CB-A566-30CD00DB1BD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26ED0658-DFC8-41CB-A566-30CD00DB1BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26ED0658-DFC8-41CB-A566-30CD00DB1BD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F9F8F35-D7CA-43B5-AD31-8728C737F877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F9F8F35-D7CA-43B5-AD31-8728C737F877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F9F8F35-D7CA-43B5-AD31-8728C737F877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F9F8F35-D7CA-43B5-AD31-8728C737F877}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

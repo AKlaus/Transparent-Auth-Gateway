@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Validation.AspNetCore;
 
-namespace AK.IdentityServerSample.IdentityServer.Routes;
+namespace AK.OAuthSamples.OpenIdDict.Server.Routes;
 
 internal static class RoutesExtension 
 {

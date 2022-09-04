@@ -7,42 +7,52 @@ using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 
-namespace AK.IdentityServerSample.IdentityServer.Configuration;
+namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 internal static class OpenIdDictEvents
 {
-	internal static ValueTask ValidateAuthorizationRequest(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
-	{
-		if (!string.Equals(context.ClientId, "TestApp", StringComparison.Ordinal))
-		{
-			context.Reject(
-				error: OpenIddictConstants.Errors.InvalidClient,
-				description: "The specified 'client_id' doesn't match a registered application.");
-			return default;
-		}
-		if (!string.Equals(context.RedirectUri, "https://localhost:5001/swagger/oauth2-redirect.html", StringComparison.Ordinal))
-		{
-			context.Reject(
-				error: OpenIddictConstants.Errors.InvalidClient,
-				description: "The specified 'redirect_uri' is not valid for this client application.");
-			return default;
-		}
-		return default;
-	}
+	internal static Func<OpenIddictServerEvents.ValidateAuthorizationRequestContext, ValueTask> ValidateAuthorizationRequestFunc(AppSettings.AuthCredentialsSettings authSettings) 
+		=> validateAuthorizationRequestContext
+			=>
+			{
+				if (!string.Equals(validateAuthorizationRequestContext.ClientId, authSettings.ClientId, StringComparison.OrdinalIgnoreCase))
+				{
+					validateAuthorizationRequestContext.Reject(
+						error: OpenIddictConstants.Errors.InvalidClient,
+						description: "The specified 'client_id' doesn't match a registered application.");
+					return default;
+				}
+				if (authSettings.RedirectUris?.Any() != true)
+				{
+					validateAuthorizationRequestContext.Reject(
+						error: OpenIddictConstants.Errors.InvalidRequestUri,
+						description: "Server has no configured allowed 'redirect_uri'.");
+					return default;
+				}
+				if (!authSettings.RedirectUris.Contains(validateAuthorizationRequestContext.RedirectUri, StringComparer.OrdinalIgnoreCase))
+				{
+					validateAuthorizationRequestContext.Reject(
+						error: OpenIddictConstants.Errors.InvalidRequestUri,
+						description: "The specified 'redirect_uri' is not valid for this client application.");
+					return default;
+				}
+				return default;
+			};
 	
-	internal static ValueTask ValidateTokenRequest(OpenIddictServerEvents.ValidateTokenRequestContext context)
-	{
-		if (!string.Equals(context.ClientId, "TestApp", StringComparison.Ordinal))
-		{
-			context.Reject(
-				error: OpenIddictConstants.Errors.InvalidClient,
-				description: "The specified 'client_id' doesn't match a registered application.");
-			return default;
-		}
-		// This demo is used by a single public client application.
-		// As such, no client secret validation is performed.
-		return default;
-	}
+	internal static Func<OpenIddictServerEvents.ValidateTokenRequestContext, ValueTask> ValidateTokenRequestFunc(AppSettings.AuthCredentialsSettings authSettings) 
+		=> validateTokenRequestContext
+			=>
+			{
+				if (!string.Equals(validateTokenRequestContext.ClientId, authSettings.ClientId, StringComparison.OrdinalIgnoreCase))
+				{
+					validateTokenRequestContext.Reject(
+						error: OpenIddictConstants.Errors.InvalidClient,
+						description: "The specified 'client_id' doesn't match a registered application.");
+					return default;
+				}
+				// No client secret validation, as this project is used by a public client application
+				return default;
+			};
 
 	internal static async ValueTask HandleAuthorizationRequest(OpenIddictServerEvents.HandleAuthorizationRequestContext context)
 	{

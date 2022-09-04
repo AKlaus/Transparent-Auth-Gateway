@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 
-namespace AK.IdentityServerSample.IdentityServer.Configuration;
+namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 internal static partial class ServiceCollectionExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using IdentityModel;
 
-namespace AK.IdentityServerSample.IdentityServer.Configuration;
+namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 public class AppSettings
 {

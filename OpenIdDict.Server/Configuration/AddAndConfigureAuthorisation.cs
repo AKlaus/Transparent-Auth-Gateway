@@ -3,7 +3,7 @@ using Microsoft.Identity.Web;
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
 
-namespace AK.IdentityServerSample.IdentityServer.Configuration;
+namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 internal static partial class ServiceCollectionExtensions
 {
@@ -28,8 +28,8 @@ internal static partial class ServiceCollectionExtensions
 							.SetTokenEndpointUris("/connect/token")
 							.SetAuthorizationEndpointUris("/connect/authorize")
 							//.SetVerificationEndpointUris("/connect/verify")
-							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequest))
-							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequest))
+							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
+							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest))
 					// Enable the Authorization Code Flow.
 							.AllowAuthorizationCodeFlow()

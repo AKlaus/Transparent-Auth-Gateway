@@ -1,5 +1,5 @@
-using AK.IdentityServerSample.IdentityServer.Configuration;
-using AK.IdentityServerSample.IdentityServer.Routes;
+using AK.OAuthSamples.OpenIdDict.Server.Configuration;
+using AK.OAuthSamples.OpenIdDict.Server.Routes;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.IdentityModel.Logging;
 
@@ -11,6 +11,7 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Lo
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
 	
 builder.Services.AddAndConfigureSwagger(settings)
+				.AddCors()
 				.AddAndConfigureAuthorisation(settings);
 
 var app = builder.Build();
@@ -22,6 +23,10 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Lo
 app .UseDeveloperExceptionPage()
 	.UseHttpsRedirection()
 	.ConfigureSwagger(settings)
+	.UseCors (policyBuilder => 
+			  policyBuilder .AllowAnyOrigin()
+							.AllowAnyMethod()
+							.AllowAnyHeader())
 	.Use(async (context, next) =>
 		{
 			Console.WriteLine(context.Request.GetDisplayUrl());

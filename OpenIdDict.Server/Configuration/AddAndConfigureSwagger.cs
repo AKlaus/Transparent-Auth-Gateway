@@ -2,7 +2,7 @@ using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
-namespace AK.IdentityServerSample.IdentityServer.Configuration;
+namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 internal static partial class ServiceCollectionExtensions
 {

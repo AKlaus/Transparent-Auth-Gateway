@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<AssemblyName>AK.OAuthSamples.OpenIdDict.Client.Api</AssemblyName>
+		<RootNamespace>AK.OAuthSamples.OpenIdDict.Client.Api</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IdentityModel.OidcClient" Version="5.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.8" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.2" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
+		<PackageReference Include="OpenIddict.Validation.AspNetCore" Version="3.1.1" />
+		<PackageReference Include="OpenIddict.Validation.SystemNetHttp" Version="3.1.1" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Content Update="appsettings.Development.json">
+			<DependentUpon>appsettings.json</DependentUpon>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+		<Content Update="appsettings.json">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>

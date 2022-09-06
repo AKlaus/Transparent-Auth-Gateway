@@ -27,7 +27,6 @@ internal static partial class ServiceCollectionExtensions
 					options 
 							.SetTokenEndpointUris("/connect/token")
 							.SetAuthorizationEndpointUris("/connect/authorize")
-							//.SetVerificationEndpointUris("/connect/verify")
 							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest))
@@ -45,7 +44,7 @@ internal static partial class ServiceCollectionExtensions
 							.DisableAccessTokenEncryption();
 
 					// Register scopes (permissions)
-					options.RegisterScopes(OidcConstants.StandardScopes.OpenId, settings.Auth.Scope);
+					options.RegisterScopes(settings.Auth.Scope);
 
 					// Need Degraded Mode to use bare-bones of OpenIdDict
 					options.EnableDegradedMode()
@@ -68,8 +67,6 @@ internal static partial class ServiceCollectionExtensions
 					options.Instance = settings.AzureAd.Instance;
 					options.TenantId = settings.AzureAd.Tenant;
 					options.ClientId = settings.AzureAd.ClientId;
-					options.Scope.Add(OidcConstants.StandardScopes.OpenId);
-					options.Scope.Add(OidcConstants.StandardScopes.Profile);
 					options.Scope.Add(settings.AzureAd.Scope);
 				});
 		return services;

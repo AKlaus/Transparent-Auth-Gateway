@@ -5,7 +5,9 @@ using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
+var isLocal = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local");
+
+if (isLocal)
 	builder.Configuration.AddUserSecrets<AppSettings>();
 
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
@@ -16,7 +18,7 @@ builder.Services.AddAndConfigureSwagger(settings)
 
 var app = builder.Build();
 
-if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
+if (isLocal)
 	// Enable showing extra debug information in the console 
 	IdentityModelEventSource.ShowPII = true; 
 	
@@ -29,7 +31,8 @@ app .UseDeveloperExceptionPage()
 							.AllowAnyHeader())
 	.Use(async (context, next) =>
 		{
-			Console.WriteLine(context.Request.GetDisplayUrl());
+			if (isLocal)
+				Console.WriteLine(context.Request.GetDisplayUrl());
 			await next.Invoke();
 		})
 	.UseAuthentication()
@@ -38,3 +41,4 @@ app .UseDeveloperExceptionPage()
 app.MapTestRoutes();
 
 app.Run();
+

@@ -1,3 +1,4 @@
+using IdentityModel;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -23,6 +24,8 @@ internal static partial class ServiceCollectionExtensions
 				}
 			};
 			authCodeFlow.AuthorizationCode.Scopes.Add(settings.Auth.Scope, "Access This API");
+			authCodeFlow.AuthorizationCode.Scopes.Add(OidcConstants.StandardScopes.OpenId, "Scope to get a refresh token");
+			authCodeFlow.AuthorizationCode.Scopes.Add(OidcConstants.StandardScopes.OfflineAccess, "Scope to get a refresh token");
 				
 			s.AddSecurity(
 				Microsoft.Identity.Web.Constants.Bearer,
@@ -50,7 +53,7 @@ internal static partial class ServiceCollectionExtensions
 				ClientId = settings.Auth.ClientId,
 				ClientSecret = string.Empty,
 				UsePkceWithAuthorizationCodeGrant = true,
-				Scopes = { settings.Auth.Scope }
+				Scopes = { settings.Auth.Scope, OidcConstants.StandardScopes.OpenId, OidcConstants.StandardScopes.OfflineAccess }
 			};
 		});
 

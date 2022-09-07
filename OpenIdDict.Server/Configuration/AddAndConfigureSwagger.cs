@@ -1,4 +1,3 @@
-using IdentityModel;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -20,12 +19,10 @@ internal static partial class ServiceCollectionExtensions
 				{
 					AuthorizationUrl = GetAzureAdEndpoint("authorize"),
 					TokenUrl = GetAzureAdEndpoint("token"),
-					RefreshUrl = GetAzureAdEndpoint("refresh")
+					RefreshUrl = GetAzureAdEndpoint("refresh"),
+					Scopes = settings.Auth.ScopesFullSet
 				}
 			};
-			authCodeFlow.AuthorizationCode.Scopes.Add(settings.Auth.Scope, "Access This API");
-			authCodeFlow.AuthorizationCode.Scopes.Add(OidcConstants.StandardScopes.OpenId, "Scope to get a refresh token");
-			authCodeFlow.AuthorizationCode.Scopes.Add(OidcConstants.StandardScopes.OfflineAccess, "Scope to get a refresh token");
 				
 			s.AddSecurity(
 				Microsoft.Identity.Web.Constants.Bearer,
@@ -51,10 +48,10 @@ internal static partial class ServiceCollectionExtensions
 			{
 				AppName = settings.AppName,
 				ClientId = settings.Auth.ClientId,
-				ClientSecret = string.Empty,
-				UsePkceWithAuthorizationCodeGrant = true,
-				Scopes = { settings.Auth.Scope, OidcConstants.StandardScopes.OpenId, OidcConstants.StandardScopes.OfflineAccess }
+				UsePkceWithAuthorizationCodeGrant = true
 			};
+			// Set selected scopes by default
+			settings.Auth.ScopesFullSet.Keys.ToList().ForEach(scope => cfg.OAuth2Client.Scopes.Add(scope));
 		});
 
 		return app;

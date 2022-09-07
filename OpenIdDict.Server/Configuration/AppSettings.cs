@@ -1,4 +1,4 @@
-﻿using IdentityModel;
+﻿using OpenIddict.Abstractions;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
@@ -22,7 +22,21 @@ public class AppSettings
 	public class AuthCredentialsSettings
 	{
 		public string ClientId { get; private set; } = null!;
-		public string Scope { get; private set; } = OidcConstants.StandardScopes.Profile;
+		/// <summary>
+		///		The special scope used for the app
+		/// </summary>
+		public string Scope { get; private set; } = OpenIddictConstants.Scopes.Profile;
+		/// <summary>
+		///		A full set of all scopes including the mandatory ones that need to be included all the time (for events, swagger, etc.)
+		/// </summary>
+		public Dictionary<string, string> ScopesFullSet => new()
+			{
+				// The app scope
+				{ Scope, "Access This API" }, 
+				// Mandatory scopes
+				{ OpenIddictConstants.Scopes.OpenId, "The default OIDC scope" }, 
+				{ OpenIddictConstants.Scopes.OfflineAccess, "Scope to get a refresh token"}
+			};
 		
 		/// <summary>
 		///		The redirect URI on successful authentication 
@@ -45,7 +59,7 @@ public class AppSettings
 		///		The Client Id (aka Application ID obtained from the "App registration" of the Azure Portal), e.g. ba74781c2-53c2-442a-97c2-3d60re42f403
 		/// </summary>
 		public string ClientId { get; private set; } = null!;
-
+		
 		/// <example>
 		///		https://login.microsoftonline.com/
 		/// </example>
@@ -55,10 +69,5 @@ public class AppSettings
 		///		The scope on the API
 		/// </summary>
 		public string Scope { get; private set; } = null!;
-		
-		/// <summary>
-		/// The authority (Instance+Tenant).
-		/// </summary>
-		public string Authority => Instance + Tenant;
 	}
 }

@@ -1,4 +1,3 @@
-using IdentityModel;
 using Microsoft.Identity.Web;
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
@@ -29,8 +28,8 @@ internal static partial class ServiceCollectionExtensions
 							.SetAuthorizationEndpointUris("/connect/authorize")
 							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
-							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest))
-					// Enable the Authorization Code Flow.
+							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest(settings.Auth)))
+					// Enable the Authorization Code Flow with PKCE and Refresh Token Flow
 							.AllowAuthorizationCodeFlow()
 							.RequireProofKeyForCodeExchange()
 							.AllowRefreshTokenFlow()
@@ -43,7 +42,9 @@ internal static partial class ServiceCollectionExtensions
 							.AddDevelopmentSigningCertificate()
 							.DisableAccessTokenEncryption();
 
-					// Register scopes (permissions)
+					// Register scopes.
+					// Note 1: 'openid' scope is there by default and 'offline_access' scope is added above by calling 'AllowRefreshTokenFlow()'
+					// Note 2: due to using 'degraded' mode, the scopes need to be re-added on creating a new principal
 					options.RegisterScopes(settings.Auth.Scope);
 
 					// Need Degraded Mode to use bare-bones of OpenIdDict

@@ -17,9 +17,9 @@ internal static partial class ServiceCollectionExtensions
 			{
 				AuthorizationCode = new OpenApiOAuthFlow
 				{
-					AuthorizationUrl = GetAzureAdEndpoint("authorize"),
-					TokenUrl = GetAzureAdEndpoint("token"),
-					RefreshUrl = GetAzureAdEndpoint("refresh"),
+					AuthorizationUrl = GetAuthEndpoint("authorize"),
+					TokenUrl = GetAuthEndpoint("token"),
+					RefreshUrl = GetAuthEndpoint("refresh"),
 					Scopes = settings.Auth.ScopesFullSet
 				}
 			};
@@ -57,5 +57,5 @@ internal static partial class ServiceCollectionExtensions
 		return app;
 	}
 
-	private static string GetAzureAdEndpoint(string endpointSuffix) => $"/connect/{endpointSuffix}";
+	private static string GetAuthEndpoint(string endpointSuffix) => $"/connect/{endpointSuffix}";
 }

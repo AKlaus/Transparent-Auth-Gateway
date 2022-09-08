@@ -21,7 +21,7 @@ public class AppSettings
 		public string Scope { get; private set; } = "profile";
 		
 		/// <summary>
-		///		The authority (URL for the Identity Server).
+		///		The authority (URL of the Auth Server).
 		/// </summary>
 		public string Authority { get; private set; } = null!;
 	}

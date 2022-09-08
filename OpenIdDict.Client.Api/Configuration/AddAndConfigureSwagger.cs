@@ -17,9 +17,9 @@ internal static partial class ServiceCollectionExtensions
 				{
 					AuthorizationCode = new OpenApiOAuthFlow
 					{
-						AuthorizationUrl = GetAzureAdEndpoint(settings, "authorize"),
-						TokenUrl = GetAzureAdEndpoint(settings, "token"),
-						RefreshUrl = GetAzureAdEndpoint(settings, "refresh")
+						AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
+						TokenUrl = GetAuthEndpoint(settings, "token"),
+						RefreshUrl = GetAuthEndpoint(settings, "refresh")
 					}
 				};
 				authCodeFlow.AuthorizationCode.Scopes.Add(settings.OAuth.Scope, "Access This API");
@@ -48,7 +48,6 @@ internal static partial class ServiceCollectionExtensions
 				{
 					AppName = settings.AppName,
 					ClientId = settings.OAuth.ClientId,
-					ClientSecret = string.Empty,
 					UsePkceWithAuthorizationCodeGrant = true
 				};
 				cfg.OAuth2Client.Scopes.Add(settings.OAuth.Scope);
@@ -57,6 +56,6 @@ internal static partial class ServiceCollectionExtensions
 		return app;
 	}
 
-	private static string GetAzureAdEndpoint(AppSettings settings, string endpointSuffix)
+	private static string GetAuthEndpoint(AppSettings settings, string endpointSuffix)
 		=> $"{settings.OAuth.Authority}/connect/{endpointSuffix}";
 }

@@ -8,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 var isLocal = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local");
 
 if (isLocal)
+{
 	builder.Configuration.AddUserSecrets<AppSettings>();
+	// Enable showing extra debug information in the console 
+	IdentityModelEventSource.ShowPII = true; }
 
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
 	
@@ -17,10 +20,6 @@ builder.Services.AddAndConfigureSwagger(settings)
 				.AddAndConfigureAuthorisation(settings);
 
 var app = builder.Build();
-
-if (isLocal)
-	// Enable showing extra debug information in the console 
-	IdentityModelEventSource.ShowPII = true; 
 	
 app .UseDeveloperExceptionPage()
 	.UseHttpsRedirection()

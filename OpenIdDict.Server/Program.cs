@@ -11,7 +11,8 @@ if (isLocal)
 {
 	builder.Configuration.AddUserSecrets<AppSettings>();
 	// Enable showing extra debug information in the console 
-	IdentityModelEventSource.ShowPII = true; }
+	IdentityModelEventSource.ShowPII = true;
+}
 
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
 	
@@ -20,8 +21,10 @@ builder.Services.AddAndConfigureSwagger(settings)
 				.AddAndConfigureAuthorisation(settings);
 
 var app = builder.Build();
-	
-app .UseDeveloperExceptionPage()
+if (isLocal)
+	app.UseDeveloperExceptionPage();
+
+app	.UseHttpsRedirection()
 	.UseHttpsRedirection()
 	.ConfigureSwagger(settings)
 	.UseCors (policyBuilder => 

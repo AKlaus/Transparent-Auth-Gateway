@@ -6,11 +6,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel.OidcClient" Version="5.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.8" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.2" />
-		<PackageReference Include="NSwag.AspNetCore" Version="13.16.1" />
+		<PackageReference Include="IdentityModel.OidcClient" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.8" />
+		<PackageReference Include="NSwag.AspNetCore" Version="13.18.0" />
 		<PackageReference Include="OpenIddict.Validation.AspNetCore" Version="3.1.1" />
 		<PackageReference Include="OpenIddict.Validation.SystemNetHttp" Version="3.1.1" />
 	</ItemGroup>

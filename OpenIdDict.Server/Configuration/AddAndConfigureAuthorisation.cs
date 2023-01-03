@@ -1,4 +1,5 @@
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Logging;
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
 
@@ -17,6 +18,9 @@ internal static partial class ServiceCollectionExtensions
 	/// </remarks>
 	public static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
 	{
+#if DEBUG
+		IdentityModelEventSource.ShowPII = true;    // Include potential PII (personally identifiable information) in exceptions in order to be in compliance with GDPR
+#endif
 		// Register the OpenIddict services
 		services.AddOpenIddict()
 				// Register the OpenIddict server components.
@@ -35,9 +39,9 @@ internal static partial class ServiceCollectionExtensions
 							.AllowRefreshTokenFlow()
 
 					// Register the signing and encryption credentials
-					// TODO: Ephemeral keys are used for development only and need to be replaced with a generated certificate  
-							//.AddEphemeralEncryptionKey()
-							//.AddEphemeralSigningKey()
+							// Note 1: Ephemeral keys are used for development only and need to be replaced with a generated certificate. See https://github.com/openiddict/openiddict-core/issues/976 for more advice
+							// Note 2: the methods below require the application pool to be configured to load a user profile, otherwise it'll cause an exception being thrown at runtime
+							// Alternatively, these 2 methods can be used: .AddEphemeralEncryptionKey().AddEphemeralSigningKey()
 							.AddDevelopmentEncryptionCertificate()
 							.AddDevelopmentSigningCertificate()
 							.DisableAccessTokenEncryption();
@@ -68,7 +72,7 @@ internal static partial class ServiceCollectionExtensions
 					options.Instance = settings.AzureAd.Instance;
 					options.TenantId = settings.AzureAd.Tenant;
 					options.ClientId = settings.AzureAd.ClientId;
-					options.Scope.Add(settings.AzureAd.Scope);
+					// Note: Scopes are irrelevant if need token_id only
 				});
 		return services;
 	}

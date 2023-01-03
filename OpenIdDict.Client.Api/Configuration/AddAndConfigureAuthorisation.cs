@@ -1,4 +1,4 @@
-using OpenIddict.Validation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AK.OAuthSamples.OpenIdDict.Client.Api.Configuration;
 
@@ -6,27 +6,15 @@ internal static partial class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings.AuthCredentialsSettings settings)
 	{
-		services.AddOpenIddict()
-				.AddValidation(options =>
+		services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(o =>
 				{
-					// Note: the validation handler uses OpenID Connect discovery
-					// to retrieve the address of the introspection endpoint.
-					options.SetIssuer(settings.Authority);
-					//options.AddAudiences("resource_server_1");
-
-					// Configure the validation handler to use introspection and register the client
-					// credentials used when communicating with the remote introspection endpoint.
-					//options.UseIntrospection();
-							//.SetClientId(settings.ClientId)
-							// Don't set Client Secret as it's a public client, see more https://github.com/openiddict/openiddict-core/issues/701
-
-					// Register the System.Net.Http integration.
-					options.UseSystemNetHttp();
-
-					// Register the ASP.NET Core host.
-					options.UseAspNetCore();
+					o.Authority = settings.Authority;
+					o.TokenValidationParameters.ValidateAudience = false;
+					// NOTE: To prevent a double round trip to '/.well-known/openid-configuration' and then '/.well-known/jwks', we can set the public key here
+					// (https://stackoverflow.com/a/59847808/968003)
+					// o.TokenValidationParameters.IssuerSigningKey = GetKey();
 				});
-		services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
 		services.AddAuthorization();
 		

@@ -56,7 +56,7 @@ public class AppSettings
 		public string Tenant { get; private set; } = null!;
 		
 		/// <summary>
-		///		The Client Id (aka Application ID obtained from the "App registration" of the Azure Portal), e.g. ba74781c2-53c2-442a-97c2-3d60re42f403
+		///		The Client Id (aka Application ID obtained from the "App registration" of the Azure Portal), e.g. b004711c2-51c9-543a-97c2-3d60re42f403
 		/// </summary>
 		public string ClientId { get; private set; } = null!;
 		
@@ -64,10 +64,5 @@ public class AppSettings
 		///		https://login.microsoftonline.com/
 		/// </example>
 		public string Instance { get; private set; } = null!;
-		
-		/// <summary>
-		///		The scope on the API
-		/// </summary>
-		public string Scope { get; private set; } = null!;
 	}
 }

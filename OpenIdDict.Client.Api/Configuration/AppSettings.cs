@@ -12,6 +12,7 @@ public class AppSettings
 	/// </summary>
 	public AuthCredentialsSettings OAuth { get; private set; } = null!;
 
+	// ReSharper disable once ClassNeverInstantiated.Global
 	public class AuthCredentialsSettings
 	{
 		public string ClientId { get; private set; } = null!;

@@ -17,7 +17,7 @@ internal static class RoutesExtension
 
 		app.MapGet(
 			"/protected",
-			[Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)] () => "Authorised access succeeded")
+			[Authorize] () => "Authorised access succeeded")
 			.WithTags("Test API");
 	}
 }

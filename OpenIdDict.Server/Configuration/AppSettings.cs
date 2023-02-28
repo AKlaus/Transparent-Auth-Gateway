@@ -1,4 +1,5 @@
 ﻿using OpenIddict.Abstractions;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
@@ -39,7 +40,7 @@ public class AppSettings
 			};
 		
 		/// <summary>
-		///		The redirect URI on successful authentication 
+		///		The white-listed redirect URIs on successful authentication 
 		/// </summary>
 		public string[] RedirectUris { get; private set; } = null!;
 		/// <summary>

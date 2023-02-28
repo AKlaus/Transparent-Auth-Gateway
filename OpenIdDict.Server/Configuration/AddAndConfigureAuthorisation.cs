@@ -1,7 +1,10 @@
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
+
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
+
+using AK.OAuthSamples.OpenIdDict.Server.Authorisation;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
@@ -67,12 +70,13 @@ internal static partial class ServiceCollectionExtensions
 		
 		services.AddAuthorization()
 				.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
+				// Configuration for the linked Azure AD tenant
 				.AddMicrosoftIdentityWebApp(options =>
 				{
 					options.Instance = settings.AzureAd.Instance;
 					options.TenantId = settings.AzureAd.Tenant;
 					options.ClientId = settings.AzureAd.ClientId;
-					// Note: Scopes are irrelevant if need token_id only
+					// Note: Scopes can be ignored if you need from MS a token_id only
 				});
 		return services;
 	}

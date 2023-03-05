@@ -1,27 +1,38 @@
 using AK.OAuthSamples.AzureADAuthClient.Configuration;
 using AK.OAuthSamples.AzureADAuthClient.Routes;
+
 using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
-	builder.Configuration.AddUserSecrets<AppSettings>();
+var isLocal = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local");
 
+if (isLocal)
+{
+	builder.Configuration.AddUserSecrets<AppSettings>();
+	// Enable showing extra debug information in the console 
+	IdentityModelEventSource.ShowPII = true;
+}
+
+// Resolving the settings
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
 	
+// Configuring the IoC/DI container
 builder.Services.AddAndConfigureSwagger(settings)
 				.AddAndConfigureAuthorisation(settings.AzureAd);
 
+// Building the middleware pipeline
 var app = builder.Build();
 
-if (builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local"))
-	// Enable showing extra debug information in the console 
-	IdentityModelEventSource.ShowPII = true; 
+if (isLocal)
+	app.UseDeveloperExceptionPage();
 
-app .UseDeveloperExceptionPage()
-	.UseHttpsRedirection()
-	.ConfigureSwagger(settings)
-	.UseAuthentication()
+app	.UseHttpsRedirection();
+
+if (isLocal)
+	app.ConfigureSwagger(settings);	// Swagger is available in DEV only
+
+app .UseAuthentication()
 	.UseAuthorization();
 	
 app.MapTestRoutes();

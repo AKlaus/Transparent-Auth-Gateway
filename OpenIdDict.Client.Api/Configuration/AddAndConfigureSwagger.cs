@@ -12,26 +12,17 @@ internal static partial class ServiceCollectionExtensions
 		services.AddOpenApiDocument(s =>
 			{
 				s.Title = settings.AppName;
-
-				var authCodeFlow = new OpenApiOAuthFlows
-				{
-					AuthorizationCode = new OpenApiOAuthFlow
-					{
-						AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
-						TokenUrl = GetAuthEndpoint(settings, "token"),
-						RefreshUrl = GetAuthEndpoint(settings, "refresh")
-					}
-				};
-				authCodeFlow.AuthorizationCode.Scopes.Add(settings.OAuth.Scope, "Access This API");
 				
 				s.AddSecurity(
 					Microsoft.Identity.Web.Constants.Bearer,
 					new OpenApiSecurityScheme
 					{
+						AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
+						TokenUrl = GetAuthEndpoint(settings, "token"),
 						Type = OpenApiSecuritySchemeType.OAuth2,
 						Description = "Identity Server auth",
 						Flow = OpenApiOAuth2Flow.AccessCode,
-						Flows = authCodeFlow
+						Scopes = new Dictionary<string, string> { [settings.OAuth.Scope] = "Access This API" }
 					});
 				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
 			});

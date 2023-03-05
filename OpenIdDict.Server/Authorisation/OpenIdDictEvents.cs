@@ -82,7 +82,8 @@ internal static class OpenIdDictEvents
 				return;
 			}
 
-			var (email, name) = ResolveAzureAdClaims(authResult.Principal);
+			var email = ResolveAzureAdEmailClaim(authResult.Principal);
+			var name = ResolveAzureAdUserNameClaim(authResult.Principal);
 			
 			// Now, identity of the user confirmed by the linked OIDC Provider.
 			
@@ -97,7 +98,7 @@ internal static class OpenIdDictEvents
 			
 			// Form new claims
 			var identity = new ClaimsIdentity(TokenValidationParameters.DefaultAuthenticationType /* sets it to 'Federated Authentication' */);
-			identity.SetClaim(OpenIddictConstants.Claims.Subject /* unique identifier of the user */, email /* or any unique identifier, see RFC-7519, 4.1.2 */);
+			identity.SetClaim(OpenIddictConstants.Claims.Subject /* unique identifier of the user */, email /* or any unique mandatory identifier, see RFC-7519, 4.1.2 */);
 			identity.SetClaim(OpenIddictConstants.Claims.Email, email);
 			identity.SetClaim(OpenIddictConstants.Claims.Name, name);
 
@@ -112,9 +113,13 @@ internal static class OpenIdDictEvents
 			identity.SetDestinations(_ => new[] { OpenIddictConstants.Destinations.AccessToken });
 		};
 
-	private static (string email, string name) ResolveAzureAdClaims(ClaimsPrincipal claims)
-		=> (
-			claims.GetClaim(OpenIddictConstants.Claims.Email) ?? "",
-			claims.GetClaim(OpenIddictConstants.Claims.PreferredUsername) ?? ""
-		);
+	/// <summary>
+	///		Resolving mandatory email from a relevant mapped claim 
+	/// </summary>
+	/// <exception cref="Exception"> Email can't be resolved </exception>
+	private static string ResolveAzureAdEmailClaim(ClaimsPrincipal claims) => claims.GetClaim(OpenIddictConstants.Claims.PreferredUsername) ?? throw new Exception("Email can't be resolved"); 
+	/// <summary>
+	///		Resolve an optional name from the claims
+	/// </summary>
+	private static string ResolveAzureAdUserNameClaim(ClaimsPrincipal claims) => claims.GetClaim(OpenIddictConstants.Claims.Name) ?? string.Empty; 
 }

@@ -12,6 +12,7 @@ public class AppSettings
 	/// </summary>
 	public AzureCredentialsSettings AzureAd { get; private set; } = null!;
 
+	// ReSharper disable once ClassNeverInstantiated.Global
 	public class AzureCredentialsSettings
 	{
 		/// <summary>

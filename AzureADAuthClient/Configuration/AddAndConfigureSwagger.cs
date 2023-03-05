@@ -12,26 +12,17 @@ internal static partial class ServiceCollectionExtensions
 		services.AddOpenApiDocument(s =>
 			{
 				s.Title = settings.AppName;
-
-				var authCodeFlow = new OpenApiOAuthFlows
-				{
-					AuthorizationCode = new OpenApiOAuthFlow
-					{
-						AuthorizationUrl = GetAzureAdEndpoint(settings, "authorize"),
-						TokenUrl = GetAzureAdEndpoint(settings, "token"),
-						RefreshUrl = GetAzureAdEndpoint(settings, "refresh")
-					}
-				};
-				authCodeFlow.AuthorizationCode.Scopes.Add(settings.AzureAd.Scope, "Access This API");
 				
 				s.AddSecurity(
 					Microsoft.Identity.Web.Constants.Bearer,
 					new OpenApiSecurityScheme
 					{
+						AuthorizationUrl = GetAzureAdEndpoint(settings,"authorize"),
+						TokenUrl = GetAzureAdEndpoint(settings,"token"),
 						Type = OpenApiSecuritySchemeType.OAuth2,
 						Description = "Azure AD auth",
 						Flow = OpenApiOAuth2Flow.AccessCode,
-						Flows = authCodeFlow
+						Scopes = new Dictionary<string, string> { [settings.AzureAd.Scope] = "Access This API" }
 					});
 				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
 			});
@@ -48,9 +39,8 @@ internal static partial class ServiceCollectionExtensions
 				{
 					AppName = settings.AppName,
 					ClientId = settings.AzureAd.ClientId,
-					ClientSecret = string.Empty,
 					UsePkceWithAuthorizationCodeGrant = true,
-					Scopes = { settings.AzureAd.Scope }
+					Scopes = { settings.AzureAd.Scope }	// Set selected scopes by default
 				};
 			});
 

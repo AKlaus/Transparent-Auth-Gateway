@@ -41,6 +41,7 @@ internal static partial class ServiceCollectionExtensions
 					ClientId = settings.OAuth.ClientId,
 					UsePkceWithAuthorizationCodeGrant = true
 				};
+				// Set selected scopes by default
 				cfg.OAuth2Client.Scopes.Add(settings.OAuth.Scope);
 			});
 

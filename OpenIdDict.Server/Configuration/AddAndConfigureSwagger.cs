@@ -10,31 +10,22 @@ internal static partial class ServiceCollectionExtensions
 	{
 		services.AddEndpointsApiExplorer();
 		services.AddOpenApiDocument(s =>
-		{
-			s.Title = settings.AppName;
-
-			var authCodeFlow = new OpenApiOAuthFlows
 			{
-				AuthorizationCode = new OpenApiOAuthFlow
-				{
-					AuthorizationUrl = GetAuthEndpoint("authorize"),
-					TokenUrl = GetAuthEndpoint("token"),
-					RefreshUrl = GetAuthEndpoint("refresh"),
-					Scopes = settings.Auth.ScopesFullSet
-				}
-			};
-				
-			s.AddSecurity(
-				Microsoft.Identity.Web.Constants.Bearer,
-				new OpenApiSecurityScheme
-				{
-					Type = OpenApiSecuritySchemeType.OAuth2,
-					Description = "OAuth 2.0 Server",
-					Flow = OpenApiOAuth2Flow.AccessCode,
-					Flows = authCodeFlow
-				});
-			s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
-		});
+				s.Title = settings.AppName;
+
+				s.AddSecurity(
+					Microsoft.Identity.Web.Constants.Bearer,
+					new OpenApiSecurityScheme
+					{
+						AuthorizationUrl = GetAuthEndpoint("authorize"),
+						TokenUrl = GetAuthEndpoint("token"),
+						Type = OpenApiSecuritySchemeType.OAuth2,
+						Description = "Identity Server auth",
+						Flow = OpenApiOAuth2Flow.AccessCode,
+						Scopes = settings.Auth.ScopesFullSet
+					});
+				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
+			});
 
 		return services;
 	}
@@ -43,16 +34,16 @@ internal static partial class ServiceCollectionExtensions
 	{
 		app.UseOpenApi();
 		app.UseSwaggerUi3(cfg =>
-		{
-			cfg.OAuth2Client = new OAuth2ClientSettings
 			{
-				AppName = settings.AppName,
-				ClientId = settings.Auth.ClientId,
-				UsePkceWithAuthorizationCodeGrant = true
-			};
-			// Set selected scopes by default
-			settings.Auth.ScopesFullSet.Keys.ToList().ForEach(scope => cfg.OAuth2Client.Scopes.Add(scope));
-		});
+				cfg.OAuth2Client = new OAuth2ClientSettings
+				{
+					AppName = settings.AppName,
+					ClientId = settings.Auth.ClientId,
+					UsePkceWithAuthorizationCodeGrant = true
+				};
+				// Set selected scopes by default
+				settings.Auth.ScopesFullSet.Keys.ToList().ForEach(scope => cfg.OAuth2Client.Scopes.Add(scope));
+			});
 
 		return app;
 	}

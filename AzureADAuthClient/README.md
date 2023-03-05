@@ -8,7 +8,7 @@ The used protocol OAuth 2 [Authorization Code Flow](https://auth0.com/docs/get-s
 
 ## 2. Run it
 
-**Prerequisite**: an _Azure AD_ tenant supporting authentication
+**Prerequisite**: an _Azure AD_ tenant supporting authentication.
 
 1. Configure `appsettings.json` (by setting parameters directly in the file or view [user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets)):
    - `AzureAd:Tenant` – the name of your tenant (e.g. _contoso.onmicrosoft.com_) or its tenant ID (a GUID). Sometime it's referred as the _issuer_<br>The parameter is used in forming a set of HTTP endpoints for the _Identity Provider_ (Azure AD in our case). E.g. `https://login.microsoftonline.com/{TENANT}/oauth2/v2.0/authorize`.

@@ -20,7 +20,7 @@ The API has just two end-points:
 - `/anonymous` that always returns HTTP code 200 on any request.
 - `/protected` that requires user to authenticate and provide a Bearer token from the Auth Gateway (see [OpenIdDict.Server](../OpenIdDict.Server) project). Otherwise, it returns HTTP code 401 Unauthorized.
 
-The authentication is handled by [NSwag](https://github.com/RicoSuter/NSwag):
+The authentication client is implemented by [NSwag](https://github.com/RicoSuter/NSwag):
 1. The user gets redirected to the Auth Gateway's `/authorize` route.<br>
 E.g. `https://localhost:5001/connect/authorize?response_type=code&client_id=TestApp&redirect_uri=https%3A%2F%2Flocalhost%3A5003%2Fswagger%2Foauth2-redirect.html&scope=openid&state={STATE}&realm=realm&code_challenge={CODE_CHALLENGE}&code_challenge_method=S256` 
 2. If a relevant user identity cookie not found, 

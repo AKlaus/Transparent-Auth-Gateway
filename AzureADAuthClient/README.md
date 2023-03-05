@@ -27,7 +27,7 @@ The API has just two end-points:
 - `/anonymous` that returns HTTP code 200 on any request with or without authentications and the bearer token.
 - `/protected` that requires user to authenticate and provide a Bearer token on request. Otherwise, it returns HTTP code 401 Unauthorized. 
 
-The authentication is handled by [NSwag](https://github.com/RicoSuter/NSwag):
+The authentication client is implemented by [NSwag](https://github.com/RicoSuter/NSwag):
 1. The user gets redirected to <br>`https://login.microsoftonline.com/{TENANT}/oauth2/v2.0/authorize?response_type=code&client_id={CLIENT}&redirect_uri=https%3A%2F%2Flocalhost%3A5001%2Fswagger%2Foauth2-redirect.html&scope={SCOPE}&state={RANDOM_STATE}%3D&realm=realm&code_challenge={CODE_CHALLENGE}&code_challenge_method=S256`
 2. If a relevant user identity cookie not found, the user gets redirected to the login page of the tenant.
 3. On successful authentication withing the tenant, the user gets redirected back to <br> `https://localhost:5001/swagger/oauth2-redirect.html?code={RECEIVED_CODE}&session_state={RANDOM_STATE}`

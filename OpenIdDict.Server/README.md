@@ -23,7 +23,9 @@ The API has just two end-points:
 - `/anonymous` that always returns HTTP code 200 on any request.
 - `/protected` that requires user to authenticate and provide a self-issued Bearer token. Otherwise, it returns HTTP code 401 Unauthorized.
 
-The authentication is handled by [NSwag](https://github.com/RicoSuter/NSwag):
+Handling OAuth 2  [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with [PKCE](https://oauth.net/2/pkce/) is implemented with using [OpenIdDict](https://github.com/openiddict/openiddict-core) NuGet package with the key implementation is in `HandleAuthorizationRequestContext` handler of its 'degraded mode' (see [this article](https://kevinchalet.com/2020/02/18/creating-an-openid-connect-server-proxy-with-openiddict-3-0-s-degraded-mode/) from the author of the library on detailed implementation). 
+
+The authentication client is implemented by [NSwag](https://github.com/RicoSuter/NSwag):
 1. The user gets redirected to `/authorize` route.<br>
    E.g. `/connect/authorize?response_type=code&client_id=TestApp&redirect_uri=https%3A%2F%2Flocalhost%3A5003%2Fswagger%2Foauth2-redirect.html&scope=openid&state={STATE}&realm=realm&code_challenge={CODE_CHALLENGE}&code_challenge_method=S256`
 2. If a relevant user identity cookie not found,

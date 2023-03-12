@@ -1,21 +1,22 @@
 Code samples for a series of articles about implementing Transparent Auth Gateway:
-1. [Needs and means](https://alex-klaus.com/transparent-auth-gateway-1). Requirements and available off-the-shelf solutions.
-2. [Auth Flows](https://alex-klaus.com/transparent-auth-gateway-2). Sequence diagrams of authentication/authorisation flows.
-3. [Writing the code](https://alex-klaus.com/transparent-auth-gateway-3). Creating a _Transparent Auth Gateway_ in .NET.
+1. [Needs and means](https://alex-klaus.com/transparent-auth-gateway-1). Requirements for enterprise apps and available off-the-shelf solutions.
+2. [Auth Flows](https://alex-klaus.com/transparent-auth-gateway-2). Relevant the authentication/authorisation flows (OAuth2, OIDC) with sequence diagrams.
+3. [Writing the code in C#](https://alex-klaus.com/transparent-auth-gateway-3). Nuts & bolts of coding a _Transparent Auth Gateway_ in .NET.
+4. [Deploying to Azure](/transparent-auth-gateway-4). _App Registrations_ and Firewall settings (Azure _WAF_ / _Front Door_).
 
 # Transparent Auth Gateway for Enterprise apps
 
 A trusted authority for our enterprise application(s) that
-- transparently (without user interaction) confirms the identity from the single authentication authority, supporting SSO;
-- issues a JWT or SAML token with app specific attributes (user’s roles/groups/etc.);
-- is self-hosted, again.
+- transparently (without additional user interaction) confirms the identity with the linked _Identity Provider_ (an _Azure AD_ tenant in this case), supporting SSO;
+- issues an _access token_ with app-specific attributes (user’s roles/groups/etc.);
+- is self-hosted without reliance on third-party services.
 
 The code uses _Azure AD_ as the linked _Identity Provider_ (for the identity checks) and an own bespoke authorisation server. 
 
 ![Transparent Auth Gateway](./auth-gateway-enterprise-apps.png)
 
 The implemented protocols:
-- OAuth 2 [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with Proof Key for Code Exchange ([PKCE](https://oauth.net/2/pkce/)).
+- OAuth 2 [Authorisation Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) ([RFC 6749](https://www.rfc-editor.org/rfc/rfc6749#section-4.1)) with [Proof Key for Code Exchange](https://www.oauth.com/oauth2-servers/pkce/) ([RFC 7636](https://www.rfc-editor.org/rfc/rfc7636))
 - OpenID Connect ([OIDC](https://openid.net/connect/)).
 
 # Code structure

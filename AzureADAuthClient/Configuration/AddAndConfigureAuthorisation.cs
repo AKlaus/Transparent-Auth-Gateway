@@ -15,7 +15,8 @@ internal static partial class ServiceCollectionExtensions
 					{
 						jwtOptions.Authority = settings.Authority;
 						jwtOptions.Audience = settings.ClientId;
-					/*	jwtOptions.Events = new JwtBearerEvents
+					/*	Uncomment for trouble-shooting. See https://stackoverflow.com/a/75624357/968003
+						jwtOptions.Events = new JwtBearerEvents
 						{
 							// If a JWT token gets rejected as invalid, set a breakpoint on the context of 'OnChallenge' event
 							OnChallenge = context => Task.CompletedTask,

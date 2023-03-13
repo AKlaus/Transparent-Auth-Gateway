@@ -31,7 +31,7 @@ public class AppSettings
 		public string Instance { get; private set; } = null!;
 		
 		/// <summary>
-		///		The scope on the API
+		///		The scope on the API. Note that for this project 'scopes' are not required, as we deal with `id_token` only where AzureAD doesn't specify scopes
 		/// </summary>
 		public string Scope { get; private set; } = null!;
 		

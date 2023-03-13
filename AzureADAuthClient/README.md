@@ -1,8 +1,8 @@
-# Direct Azure AD authentication from Swagger
+# Azure AD authentication with using `id_token` only
 
 ## 1. Purpose
 
-A quick test of _Azure AD_ authentication with minimum code.
+A quick test of _Azure AD_ authentication with `id_token` only implementing minimum code. This project is for testing purposes to proceed further to Auth Gateway developement.
 
 The used protocol OAuth 2 [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with Proof Key for Code Exchange ([PKCE](https://oauth.net/2/pkce/)).
 

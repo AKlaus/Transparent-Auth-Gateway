@@ -6,13 +6,8 @@ using Microsoft.IdentityModel.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 var isLocal = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local");
-
 if (isLocal)
-{
 	builder.Configuration.AddUserSecrets<AppSettings>();
-	// Enable showing extra debug information in the console 
-	IdentityModelEventSource.ShowPII = true;
-}
 
 // Resolving the settings
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
@@ -33,8 +28,12 @@ if (isLocal)
 	app.ConfigureSwagger(settings);	// Swagger is available in DEV only
 
 app .UseAuthentication()
-	.UseAuthorization();
+	.UseAuthorization();	// Required only if the project has secured end-points 
 	
 app.MapTestRoutes();
+
+if (isLocal)
+	// Enable showing extra debug information in the console. Must be added right before `Run()`, see https://stackoverflow.com/a/73956586/968003
+	IdentityModelEventSource.ShowPII = true;
 
 app.Run();

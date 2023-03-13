@@ -27,7 +27,8 @@ app	.UseHttpsRedirection();
 if (isLocal)
 	app.ConfigureSwagger(settings);	// Swagger is available in DEV only
 
-app .UseAuthentication()
+app .UseStaticFiles()		// Serve JavaScript from wwwroot
+	.UseAuthentication()
 	.UseAuthorization();	// Required only if the project has secured end-points 
 	
 app.MapTestRoutes();

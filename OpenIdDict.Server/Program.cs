@@ -9,11 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var isLocal = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Local");
 
 if (isLocal)
-{
 	builder.Configuration.AddUserSecrets<AppSettings>();
-	// Enable showing extra debug information in the console 
-	IdentityModelEventSource.ShowPII = true;
-}
 
 // Resolving the settings
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
@@ -48,5 +44,9 @@ app	.UseCors (policyBuilder =>
 	.UseAuthorization();	// Note 1: 'Authorization' is required only if the project has secured end-points
 							// Note 2: the Authorization middleware must be register AFTER the Authentication middleware
 app.MapTestRoutes();
+
+if (isLocal)
+	// Enable showing extra debug information in the console. Must be added right before `Run()`, see https://stackoverflow.com/a/73956586/968003
+	IdentityModelEventSource.ShowPII = true;
 
 app.Run();

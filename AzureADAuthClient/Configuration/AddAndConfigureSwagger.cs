@@ -17,8 +17,7 @@ internal static partial class ServiceCollectionExtensions
 					new OpenApiSecurityScheme
 					{
 						AuthorizationUrl = GetAzureAdEndpoint(settings,"authorize")+"?nonce=SWAGGER",	// pass 'nonce', as Swagger UI still doesn't fully support OIDC (see https://github.com/swagger-api/swagger-ui/issues/3517)
-																													// It also doesn't support `response_mode=form_post` but it's not critical dor local debugging
-						TokenUrl = GetAzureAdEndpoint(settings,"token"),
+																													// It also doesn't support `response_mode=form_post` but it's not critical for local debugging
 						Type = OpenApiSecuritySchemeType.OAuth2,
 						Description = "Azure AD auth by `id_token` only",
 						Flow = OpenApiOAuth2Flow.Implicit,

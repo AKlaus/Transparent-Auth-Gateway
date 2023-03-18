@@ -47,6 +47,7 @@ app.MapTestRoutes();
 
 if (isLocal)
 	// Enable showing extra debug information in the console. Must be added right before `Run()`, see https://stackoverflow.com/a/73956586/968003
+	// Includes potential PII (personally identifiable information) in exceptions in order to be in compliance with GDPR
 	IdentityModelEventSource.ShowPII = true;
 
 app.Run();

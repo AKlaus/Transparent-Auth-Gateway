@@ -1,5 +1,4 @@
 using Microsoft.Identity.Web;
-using Microsoft.IdentityModel.Logging;
 
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
@@ -21,9 +20,6 @@ internal static partial class ServiceCollectionExtensions
 	/// </remarks>
 	public static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
 	{
-#if DEBUG
-		IdentityModelEventSource.ShowPII = true;    // Include potential PII (personally identifiable information) in exceptions in order to be in compliance with GDPR
-#endif
 		// Register the OpenIddict services
 		services.AddOpenIddict()
 				// Register the OpenIddict server components.

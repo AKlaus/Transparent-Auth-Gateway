@@ -70,7 +70,7 @@ internal static class OpenIdDictEvents
 			var request = context.Transaction.GetHttpRequest() ??
 			              throw new InvalidOperationException("The ASP.NET request cannot be retrieved.");
 			
-			// Retrieve the user principal stored in the authentication cookie.
+			// Retrieve the user principal stored in the user profile cookie.
 			var authResult = await request.HttpContext.AuthenticateAsync(OpenIdConnectDefaults.AuthenticationScheme);
 			// If the principal cannot be retrieved, this indicates that the user is not logged in.
 			if (authResult?.Succeeded != true || authResult?.Principal == null) 

@@ -1,8 +1,8 @@
 Code samples for a series of articles about implementing Transparent Auth Gateway:
 1. [Needs and means](https://alex-klaus.com/transparent-auth-gateway-1). Requirements for enterprise apps and available off-the-shelf solutions.
-2. [Auth Flows](https://alex-klaus.com/transparent-auth-gateway-2). Relevant the authentication/authorisation flows (OAuth2, OIDC) with sequence diagrams.
-3. [Writing the code in C#](https://alex-klaus.com/transparent-auth-gateway-3). Nuts & bolts of coding a _Transparent Auth Gateway_ in .NET.
-4. [Deploying to Azure](/transparent-auth-gateway-4). _App Registrations_ and Firewall settings (Azure _WAF_ / _Front Door_).
+2. [Auth Flows](https://alex-klaus.com/transparent-auth-gateway-2). Relevant authentication/authorisation flows (OAuth2, OIDC) with sequence diagrams.
+3. [Writing the code in C#](https://alex-klaus.com/transparent-auth-gateway-3). Comments to the code in this repo – a _Transparent Auth Gateway_ in .NET.
+4. [Deploying to Azure](https://alex-klaus.com/transparent-auth-gateway-4). _App Registrations_ and Firewall settings (Azure _WAF_ / _Front Door_).
 
 # Transparent Auth Gateway for Enterprise apps
 

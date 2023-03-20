@@ -8,6 +8,7 @@ Code samples for a series of articles about implementing Transparent Auth Gatewa
 
 A trusted authority for our enterprise application(s) that
 - transparently (without additional user interaction) confirms the identity with the linked _Identity Provider_ (an _Azure AD_ tenant in this case), supporting SSO;
+- conducts extra authentication checks (with a potential for own user management);
 - issues an _access token_ with app-specific attributes (user’s roles/groups/etc.);
 - is self-hosted without reliance on third-party services.
 

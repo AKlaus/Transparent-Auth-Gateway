@@ -5,6 +5,9 @@ using OpenIddict.Validation.AspNetCore;
 
 using AK.OAuthSamples.OpenIdDict.Server.Authorisation;
 
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
 internal static partial class ServiceCollectionExtensions
@@ -20,6 +23,10 @@ internal static partial class ServiceCollectionExtensions
 	/// </remarks>
 	public static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
 	{
+		// Register auxiliary classes for caching/resolving the auth code in/from memory cache  
+		services.TryAddSingleton<RequireDegradedModeEnabled>();
+		services.TryAdd(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
+		
 		// Register the OpenIddict services
 		services.AddOpenIddict()
 				// Register the OpenIddict server components.
@@ -36,6 +43,9 @@ internal static partial class ServiceCollectionExtensions
 							.AllowAuthorizationCodeFlow()
 							.RequireProofKeyForCodeExchange()
 							.AllowRefreshTokenFlow()
+					// Enable caching/resolving the auth code in/from memory cache		
+							.AddEventHandler(CodeReferenceTokenStorageHandler.Descriptor)
+							.AddEventHandler(ValidateCodeReferenceTokenHandler.Descriptor)
 
 					// Register the signing and encryption credentials
 							// Note 1: Ephemeral keys are used for development only and need to be replaced with a generated certificate. See https://github.com/openiddict/openiddict-core/issues/976 for more advice

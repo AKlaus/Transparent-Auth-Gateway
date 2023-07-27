@@ -9,5 +9,10 @@
         <Authors>Alex Klaus</Authors>
 
         <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+        <AssemblyName>AK.OAuthSamples.$(MSBuildProjectName)</AssemblyName>
+        <RootNamespace>AK.OAuthSamples.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+        <UserSecretsId>AK.OAuthSamples</UserSecretsId>
+        
     </PropertyGroup>
 </Project>

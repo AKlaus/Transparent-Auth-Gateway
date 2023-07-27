@@ -1,4 +1,4 @@
-![CI](https://github.com/AKlaus/Transparent-Auth-Gateway/workflows/CI/badge.svg)
+[![Build](https://github.com/AKlaus/Transparent-Auth-Gateway/actions/workflows/build.yml/badge.svg)](https://github.com/AKlaus/Transparent-Auth-Gateway/actions/workflows/build.yml)
 
 Code samples for a series of articles about implementing Transparent Auth Gateway:
 1. [Needs and means](https://alex-klaus.com/transparent-auth-gateway-1). Requirements for enterprise apps and available off-the-shelf solutions.

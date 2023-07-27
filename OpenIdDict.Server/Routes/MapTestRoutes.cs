@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using OpenIddict.Validation.AspNetCore;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Routes;
 

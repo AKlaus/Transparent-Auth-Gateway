@@ -13,6 +13,11 @@ namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 internal static partial class ServiceCollectionExtensions
 {
 	/// <summary>
+	///		The expiration of the auth code sent to the client 
+	/// </summary>
+	internal static TimeSpan AuthorizationCodeLifetime = TimeSpan.FromMinutes(3);
+	
+	/// <summary>
 	///		Register the auth engine
 	/// </summary>
 	/// <remarks>
@@ -21,7 +26,7 @@ internal static partial class ServiceCollectionExtensions
 	///			`/authorize` – issues an authorization code (redirects to Azure AD) 
 	///			`/token` – exchanges the authorization code for an access token (how does it get used for refreshing the token?)
 	/// </remarks>
-	public static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
+	internal static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
 	{
 		// Register auxiliary classes for caching/resolving the auth code in/from memory cache  
 		services.TryAddSingleton<RequireDegradedModeEnabled>();
@@ -59,6 +64,9 @@ internal static partial class ServiceCollectionExtensions
 					// Note 1: 'openid' scope is there by default and 'offline_access' scope is added above by calling 'AllowRefreshTokenFlow()'
 					// Note 2: due to using 'degraded' mode, the scopes need to be re-added on creating a new principal
 					options.RegisterScopes(settings.Auth.Scope);
+
+					// Reduce the expiration time of the auth code
+					options.Configure(o => o.AuthorizationCodeLifetime = AuthorizationCodeLifetime);
 
 					// Need Degraded Mode to use bare-bones of OpenIdDict
 					options.EnableDegradedMode()

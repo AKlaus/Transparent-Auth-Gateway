@@ -1,3 +1,5 @@
+using AK.OAuthSamples.OpenIdDict.Server.Configuration;
+
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 
@@ -40,7 +42,10 @@ public sealed class CodeReferenceTokenStorageHandler : IOpenIddictServerHandler<
 		if (context.TokenType == OpenIddictConstants.TokenTypeHints.AuthorizationCode)
 		{
 			var codeTokenReference = Base64UrlEncoder.Encode(Guid.NewGuid().ToByteArray());
-			_memoryCache.Set(codeTokenReference, context.Token, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(1)));
+			_memoryCache.Set(	codeTokenReference, 
+								context.Token, 
+								new MemoryCacheEntryOptions().SetSlidingExpiration(ServiceCollectionExtensions.AuthorizationCodeLifetime)
+							);
 
 			context.Token = codeTokenReference;
 		}

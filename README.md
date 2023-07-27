@@ -1,3 +1,5 @@
+![CI](https://github.com/AKlaus/Transparent-Auth-Gateway/workflows/CI/badge.svg)
+
 Code samples for a series of articles about implementing Transparent Auth Gateway:
 1. [Needs and means](https://alex-klaus.com/transparent-auth-gateway-1). Requirements for enterprise apps and available off-the-shelf solutions.
 2. [Auth Flows](https://alex-klaus.com/transparent-auth-gateway-2). Relevant authentication/authorisation flows (OAuth2, OIDC) with sequence diagrams.

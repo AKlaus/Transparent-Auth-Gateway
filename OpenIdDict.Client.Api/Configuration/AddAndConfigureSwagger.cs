@@ -14,7 +14,7 @@ internal static partial class ServiceCollectionExtensions
 				s.Title = settings.AppName;
 				
 				s.AddSecurity(
-					Microsoft.Identity.Web.Constants.Bearer,
+					"Bearer",
 					new OpenApiSecurityScheme
 					{
 						AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
@@ -24,7 +24,7 @@ internal static partial class ServiceCollectionExtensions
 						Flow = OpenApiOAuth2Flow.AccessCode,
 						Scopes = new Dictionary<string, string> { [settings.OAuth.Scope] = "Access This API" }
 					});
-				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
+				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(/* 'Bearer' is the default scheme */));
 			});
 
 		return services;

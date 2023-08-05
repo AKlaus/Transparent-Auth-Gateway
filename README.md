@@ -14,7 +14,7 @@ A trusted authority for our enterprise application(s) that
 - issues an _access token_ with app-specific attributes (user’s roles/groups/etc.);
 - is self-hosted without reliance on third-party services.
 
-The code uses _Azure AD_ as the linked _Identity Provider_ (for the identity checks) and an own bespoke authorisation server. 
+The code uses _Azure AD_ as the linked _Identity Provider_ (for the identity checks) and its own bespoke authorisation server. 
 
 ![Transparent Auth Gateway](./auth-gateway-enterprise-apps.png)
 
@@ -26,6 +26,15 @@ The implemented protocols:
 There are 3 projects:
 
 - [AzureADAuthClient](./AzureADAuthClient) – a quick way to ensure that _Azure AD_ authentication is configured. Uses Swagger UI to acquire a token and the standard `Microsoft.Identity` way to validate the token on WebAPI.
-- [OpenIdDict.Server](./OpenIdDict.Server) – a bespoke _Transparent Auth Gateway_ that that implements OAuth 2 [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with [PKCE](https://oauth.net/2/pkce/) to serve other client apps as a trusted authority and perform authentication from a linked _Identity Provider_ (a specified tenant of Azure AD).
-- [OpenIdDict.Client.Api](./OpenIdDict.Client.Api) – A Web API app that validates the _access token_ issued by a custom Auth Gateway along with a Swagger front-end to request the token and run HTTP requests against test end-points.
+- [OpenIdDict.Server](./OpenIdDict.Server) – a bespoke _Transparent Auth Gateway_ to confirm the user's identity from the linked provider and authorise the user (issue own _access token_) according to the bespoke rules:
+  - implements OAuth 2 [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with [PKCE](https://oauth.net/2/pkce/) to serve other client apps as the trusted authority; 
+  - perform authentication from the linked _Identity Provider_ (a specified tenant of Azure AD).
+- [OpenIdDict.Client.Api](./OpenIdDict.Client.Api) – A Web API app that validates the _access token_ issued by the Auth Gateway (`OpenIdDict.Server`). Contains:
+  - Swagger front-end to request the token and run HTTP requests;
+  - test API end-points.
 
+# How's it different?
+The key differences:
+- Issues its own _access token_ based on internal rules and confirmed user's identity from an Azure AD tenant.
+- Requires no database.
+- Has minimum code and "magical" behaviour from the packages.

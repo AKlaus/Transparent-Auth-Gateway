@@ -9,6 +9,19 @@ using OpenIddict.Server;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Authorisation;
 
+//
+// The default implementation uses encrypted JWTs as Auth Codes with all the identity information. It (especially the JWT signature)
+// blows out the size of the generated code string (may exceed 2,048 symbols) that gets returned in the Query String.
+// Kestrel / Firewalls / browsers may prohibit requests with such long query strings.
+// As a workaround, the code below replaces the 'auth code' with a 'reference token' (a GUID in this case) and stores the pair in memory cache.
+// This approach is not a part of the OAuth2 spec (as it doesn't specify what the 'auth code' must look like) but a widely accepted practice.
+// Here are some links: 
+//		- Auth0 calls them “opaque” token: https://auth0.com/docs/secure/tokens/access-tokens#opaque-access-tokens
+//		- IdentityServer4 is using ref tokens: https://identityserver4.readthedocs.io/en/latest/topics/reference_tokens.html
+//		- LeastPrivilege: https://leastprivilege.com/2015/11/25/reference-tokens-and-introspection/
+//
+
+
 /// <summary>
 ///		Caches the <i>Authorization Code</i> in memory cache and replaces it with a reference that can be resolved later
 /// </summary>

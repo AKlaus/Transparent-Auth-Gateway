@@ -31,5 +31,5 @@ The authentication client is implemented by [NSwag](https://github.com/RicoSuter
 2. If a relevant user identity cookie not found,
    1. the user gets redirected further to the login page of the linked _Identity Provider_ (for Azure AD it's `https://login.microsoftonline.com/{TENANT}/oauth2/v2.0/authorize`).
    2. on successful authentication withing the tenant, the user gets redirected back to the Auth Gateway to continue the authentication/authorisation process.
-3. On successful authentication/authorisation, the user gets redirected back to Swagger<br> `/swagger/oauth2-redirect.html?code={RECEIVED_CODE}&session_state={RANDOM_STATE}`
+3. On successful authentication/authorisation, the user gets redirected back to Swagger<br> `/swagger/oauth2-redirect.html?code={CODE}&session_state={RANDOM_STATE}`,<br>where `CODE` is a reference token to the auth code stored in memory cache on the server.
 4. Then _NSwag_'s JavaScript exchanges the received _code_ to an _access token_ by running a `POST` request to `/token`.

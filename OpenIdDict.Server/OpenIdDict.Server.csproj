@@ -2,7 +2,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Identity.Web" Version="2.13.1" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="2.13.2" />
 		<PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
 		<PackageReference Include="OpenIddict.Server.AspNetCore" Version="4.6.0" />
 		<PackageReference Include="OpenIddict.Validation.AspNetCore" Version="4.6.0" />

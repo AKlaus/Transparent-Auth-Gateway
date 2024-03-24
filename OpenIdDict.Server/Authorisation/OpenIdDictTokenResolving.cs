@@ -87,6 +87,10 @@ public sealed class ValidateCodeReferenceTokenHandler : IOpenIddictServerHandler
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateTokenContext>()
             .AddFilter<RequireDegradedModeEnabled>()
             .UseScopedHandler<ValidateCodeReferenceTokenHandler>()
+            /*
+             * NOTE that the order number below might need to be changed in future OpenIddict versions
+             * The auth code must be resolved cache before `OpenIddict.Server.OpenIddictServerHandlers.ValidateAuthorizationCode`
+             */
             .SetOrder(OpenIddictServerHandlers.Protection.ResolveTokenValidationParameters.Descriptor.Order + 990)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();

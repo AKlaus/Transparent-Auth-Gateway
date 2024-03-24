@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <Features>strict</Features>
@@ -15,4 +15,8 @@
         <UserSecretsId>AK.OAuthSamples</UserSecretsId>
         
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.4" />
+    </ItemGroup>
 </Project>

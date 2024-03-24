@@ -42,7 +42,7 @@ app	.UseCors (policyBuilder =>
 		})
 	.UseAuthentication()
 	.UseAuthorization();	// Note 1: 'Authorization' is required only if the project has secured end-points
-							// Note 2: the Authorization middleware must be register AFTER the Authentication middleware
+							// Note 2: the Authorization middleware must be registered AFTER the Authentication middleware
 app.MapTestRoutes();
 
 if (isLocal)

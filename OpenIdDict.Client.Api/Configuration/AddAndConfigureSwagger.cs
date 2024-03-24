@@ -33,7 +33,7 @@ internal static partial class ServiceCollectionExtensions
 	public static IApplicationBuilder ConfigureSwagger(this IApplicationBuilder app, AppSettings settings)
 	{
 		app.UseOpenApi();
-		app.UseSwaggerUi3(cfg =>
+		app.UseSwaggerUi(cfg =>
 			{
 				cfg.OAuth2Client = new OAuth2ClientSettings
 				{

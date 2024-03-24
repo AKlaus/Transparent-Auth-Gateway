@@ -21,7 +21,7 @@ internal static partial class ServiceCollectionExtensions
 						Type = OpenApiSecuritySchemeType.OAuth2,
 						Description = "Azure AD auth by `id_token` only",
 						Flow = OpenApiOAuth2Flow.Implicit,
-						ExtensionData = new Dictionary<string, object> 
+						ExtensionData = new Dictionary<string, object?> 
 						{
 							// Forcing to extract `id_token` and use it as the bearer token (see https://stackoverflow.com/a/59784134/968003)
 							["x-tokenName"]= "id_token"
@@ -42,7 +42,7 @@ internal static partial class ServiceCollectionExtensions
 	public static IApplicationBuilder ConfigureSwagger(this IApplicationBuilder app, AppSettings settings)
 	{
 		app.UseOpenApi();
-		app.UseSwaggerUi3(cfg =>
+		app.UseSwaggerUi(cfg =>
 			{
 				cfg.OAuth2Client = new OAuth2ClientSettings
 				{

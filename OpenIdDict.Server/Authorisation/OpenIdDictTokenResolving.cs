@@ -42,7 +42,7 @@ public sealed class CodeReferenceTokenStorageHandler : IOpenIddictServerHandler<
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.GenerateTokenContext>()
             .AddFilter<RequireDegradedModeEnabled>()
             .UseScopedHandler<CodeReferenceTokenStorageHandler>()
-            .SetOrder(OpenIddictServerHandlers.Protection.GenerateIdentityModelToken.Descriptor.Order + 2_000)
+            .SetOrder(OpenIddictServerHandlers.Protection.GenerateIdentityModelToken.Descriptor.Order + 990)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
@@ -87,7 +87,7 @@ public sealed class ValidateCodeReferenceTokenHandler : IOpenIddictServerHandler
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateTokenContext>()
             .AddFilter<RequireDegradedModeEnabled>()
             .UseScopedHandler<ValidateCodeReferenceTokenHandler>()
-            .SetOrder(OpenIddictServerHandlers.Protection.ResolveTokenValidationParameters.Descriptor.Order + 2_000)
+            .SetOrder(OpenIddictServerHandlers.Protection.ResolveTokenValidationParameters.Descriptor.Order + 990)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 

@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "WebApiWithAzureADauth": {
+    "AzureADAuthClient": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

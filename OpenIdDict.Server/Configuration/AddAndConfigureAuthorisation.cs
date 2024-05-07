@@ -98,7 +98,7 @@ internal static partial class ServiceCollectionExtensions
 						OnRemoteFailure = async context =>
 						{
 							// Without this handler an exception will be thrown on sending a simple `curl --request POST 'https://LOCALHOST/signin-oidc'` 
-							// Log the exception details to the log sink
+							// NOTE: Add logging of the exception to the log sink
 							await context.Request.HttpContext.ForbidAsync();
 							await context.Response.WriteAsync("Incorrect response from Azure AD");
 							context.HandleResponse();

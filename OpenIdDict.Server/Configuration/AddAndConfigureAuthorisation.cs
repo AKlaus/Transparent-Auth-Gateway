@@ -1,12 +1,13 @@
-using Microsoft.Identity.Web;
-
 using OpenIddict.Server;
 using OpenIddict.Validation.AspNetCore;
 
-using AK.OAuthSamples.OpenIdDict.Server.Authorisation;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Identity.Web;
+
+using AK.OAuthSamples.OpenIdDict.Server.Authorisation;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
@@ -91,6 +92,18 @@ internal static partial class ServiceCollectionExtensions
 					options.TenantId = settings.AzureAd.Tenant;
 					options.ClientId = settings.AzureAd.ClientId;
 					// Note: Scopes can be ignored if you need from MS a token_id only
+					
+					options.Events = new OpenIdConnectEvents
+					{	// Incorrect /signin-oidc requests
+						OnRemoteFailure = async context =>
+						{
+							// Without this handler an exception will be thrown on sending a simple `curl --request POST 'https://LOCALHOST/signin-oidc'` 
+							// Log the exception details to the log sink
+							await context.Request.HttpContext.ForbidAsync();
+							await context.Response.WriteAsync("Incorrect response from Azure AD");
+							context.HandleResponse();
+						}
+					};
 				});
 		return services;
 	}

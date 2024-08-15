@@ -112,6 +112,31 @@ internal static class OpenIdDictEvents
 			// Another plus, the API controllers can retrieve them from the ClaimsPrincipal instance.
 			identity.SetDestinations(_ => new[] { OpenIddictConstants.Destinations.AccessToken });
 		};
+	
+	/// <summary>
+	///		Validation of `/logout` requests
+	/// </summary>	
+	internal static Func<OpenIddictServerEvents.ValidateLogoutRequestContext, ValueTask> ValidateLogoutRequestFunc(AppSettings.AuthCredentialsSettings authSettings) => 
+		context =>
+		{
+            ArgumentNullException.ThrowIfNull(context);
+
+            if (string.IsNullOrEmpty(context.PostLogoutRedirectUri))
+                return default;
+
+            // Optionally, can validate the `PostLogoutRedirectUri`
+			return default;
+		};
+	
+	/// <summary>
+	///		Handling of `/logout` requests
+	/// </summary>	
+	internal static Func<OpenIddictServerEvents.HandleLogoutRequestContext, ValueTask> HandleLogoutRequestFunc(AppSettings.AuthCredentialsSettings authSettings) => 
+		context =>
+		{
+			context.SignOut();
+			return default;
+		};
 
 	/// <summary>
 	///		Resolving mandatory email from a relevant mapped claim 

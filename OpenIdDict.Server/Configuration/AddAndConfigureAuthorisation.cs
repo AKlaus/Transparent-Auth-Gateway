@@ -42,9 +42,13 @@ internal static partial class ServiceCollectionExtensions
 					options 
 							.SetTokenEndpointUris("/connect/token")
 							.SetAuthorizationEndpointUris("/connect/authorize")
-							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
+							.SetLogoutEndpointUris("/connect/logout")
 							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
+							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest(settings.Auth)))
+					// Handle Logout
+							.AddEventHandler<OpenIddictServerEvents.ValidateLogoutRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateLogoutRequestFunc(settings.Auth)))
+							.AddEventHandler<OpenIddictServerEvents.HandleLogoutRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleLogoutRequestFunc(settings.Auth)))
 					// Enable the Authorization Code Flow with PKCE and Refresh Token Flow
 							.AllowAuthorizationCodeFlow()
 							.RequireProofKeyForCodeExchange()

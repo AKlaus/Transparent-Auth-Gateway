@@ -17,12 +17,22 @@ internal static partial class ServiceCollectionExtensions
 					"Bearer",
 					new OpenApiSecurityScheme
 					{
-						AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
-						TokenUrl = GetAuthEndpoint(settings, "token"),
 						Type = OpenApiSecuritySchemeType.OAuth2,
 						Description = "Identity Server auth",
-						Flow = OpenApiOAuth2Flow.AccessCode,
-						Scopes = new Dictionary<string, string> { [settings.OAuth.Scope] = "Access This API" }
+						Flows = new OpenApiOAuthFlows
+						{
+							ClientCredentials = new OpenApiOAuthFlow
+							{
+								TokenUrl = GetAuthEndpoint(settings, "token")
+							},
+							AuthorizationCode = new OpenApiOAuthFlow
+							{
+								TokenUrl = GetAuthEndpoint(settings, "token"),
+								AuthorizationUrl = GetAuthEndpoint(settings, "authorize"),
+								RefreshUrl = GetAuthEndpoint(settings, "token"),
+								Scopes = new Dictionary<string, string> { [settings.OAuth.Scope] = "Access This API" }
+							}
+						}
 					});
 				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(/* 'Bearer' is the default scheme */));
 			});

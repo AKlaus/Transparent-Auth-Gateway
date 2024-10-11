@@ -24,7 +24,7 @@ internal static partial class ServiceCollectionExtensions
 	/// <remarks>
 	///		OAuth 2.0 uses two endpoints: `/authorize` and `/oauth/token` (https://auth0.com/docs/authenticate/protocols/oauth).
 	///		Their meaning for the Authorization Code Flow:
-	///			`/authorize` – issues an authorization code (redirects to Azure AD) 
+	///			`/authorize` – issues an authorization code (redirects to Azure Entra ID) 
 	///			`/token` – exchanges the authorization code for an access token (how does it get used for refreshing the token?)
 	/// </remarks>
 	internal static IServiceCollection AddAndConfigureAuthorisation(this IServiceCollection services, AppSettings settings)
@@ -45,10 +45,13 @@ internal static partial class ServiceCollectionExtensions
 							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest(settings.Auth)))
+							.AddEventHandler<OpenIddictServerEvents.HandleTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleClientCredentialsTokenRequest(settings.Auth)))
 					// Enable the Authorization Code Flow with PKCE and Refresh Token Flow
 							.AllowAuthorizationCodeFlow()
 							.RequireProofKeyForCodeExchange()
 							.AllowRefreshTokenFlow()
+					// Enable the Client Credential Flow
+							.AllowClientCredentialsFlow()
 					// Enable caching/resolving the auth code in/from memory cache		
 							.AddEventHandler(CodeReferenceTokenStorageHandler.Descriptor)
 							.AddEventHandler(ValidateCodeReferenceTokenHandler.Descriptor)
@@ -85,7 +88,7 @@ internal static partial class ServiceCollectionExtensions
 		
 		services.AddAuthorization()
 				.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)
-				// Configuration for the linked Azure AD tenant
+				// Configuration for the linked Azure Entra ID tenant
 				.AddMicrosoftIdentityWebApp(options =>
 				{
 					options.Instance = settings.AzureAd.Instance;
@@ -100,7 +103,7 @@ internal static partial class ServiceCollectionExtensions
 							// Without this handler an exception will be thrown on sending a simple `curl --request POST 'https://LOCALHOST/signin-oidc'` 
 							// NOTE: Add logging of the exception to the log sink
 							await context.Request.HttpContext.ForbidAsync();
-							await context.Response.WriteAsync("Incorrect response from Azure AD");
+							await context.Response.WriteAsync("Incorrect response from Azure Entra ID");
 							context.HandleResponse();
 						}
 					};

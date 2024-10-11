@@ -19,7 +19,7 @@ internal static partial class ServiceCollectionExtensions
 						AuthorizationUrl = GetAzureAdEndpoint(settings,"authorize")+"?nonce=SWAGGER",	// pass 'nonce', as Swagger UI still doesn't fully support OIDC (see https://github.com/swagger-api/swagger-ui/issues/3517)
 																													// It also doesn't support `response_mode=form_post` but it's not critical for local debugging
 						Type = OpenApiSecuritySchemeType.OAuth2,
-						Description = "Azure AD auth by `id_token` only",
+						Description = "Azure Entra ID auth by `id_token` only",
 						Flow = OpenApiOAuth2Flow.Implicit,
 						ExtensionData = new Dictionary<string, object?> 
 						{
@@ -28,7 +28,7 @@ internal static partial class ServiceCollectionExtensions
 						},
 						Scopes = new Dictionary<string, string>
 						{
-							[settings.AzureAd.Scope] = "Access This API",	// [Optional] To control access to the app by Azure AD users
+							[settings.AzureAd.Scope] = "Access This API",	// [Optional] To control access to the app by Azure Entra ID users
 							["profile"] = "Profile",						// [Optional] Returns claims that represent basic profile information, including name, family_name, given_name, etc.
 							["openid"] = "Mandatory 'OpenId'"				// Required by OIDC
 						}

@@ -11,7 +11,7 @@ public class AppSettings
 	public string AppName { get; private set; } = null!;
 	
 	/// <summary>
-	///		Settings for the App Registration and Azure AD 
+	///		Settings for the App Registration and Azure Entra ID
 	/// </summary>
 	public AzureCredentialsSettings AzureAd { get; private set; } = null!;
 

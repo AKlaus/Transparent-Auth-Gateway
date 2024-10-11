@@ -45,10 +45,13 @@ internal static partial class ServiceCollectionExtensions
 							.AddEventHandler<OpenIddictServerEvents.ValidateAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateAuthorizationRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.ValidateTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.ValidateTokenRequestFunc(settings.Auth)))
 							.AddEventHandler<OpenIddictServerEvents.HandleAuthorizationRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleAuthorizationRequest(settings.Auth)))
+							.AddEventHandler<OpenIddictServerEvents.HandleTokenRequestContext>(builder => builder.UseInlineHandler(OpenIdDictEvents.HandleClientCredentialsTokenRequest(settings.Auth)))
 					// Enable the Authorization Code Flow with PKCE and Refresh Token Flow
 							.AllowAuthorizationCodeFlow()
 							.RequireProofKeyForCodeExchange()
 							.AllowRefreshTokenFlow()
+					// Enable the Client Credential Flow
+							.AllowClientCredentialsFlow()
 					// Enable caching/resolving the auth code in/from memory cache		
 							.AddEventHandler(CodeReferenceTokenStorageHandler.Descriptor)
 							.AddEventHandler(ValidateCodeReferenceTokenHandler.Descriptor)

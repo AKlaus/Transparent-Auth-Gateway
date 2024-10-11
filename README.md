@@ -31,13 +31,13 @@ There are 3 projects:
   - implements OAuth 2 flows to serve as the trusted authorization authority to other client apps:
     - [Authorization Code Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow) with [PKCE](https://oauth.net/2/pkce/) for user authorization;
     - [Client Credentials Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow) for API integration; 
-  - for users authorization, it perform authentication from the linked _Identity Provider_ (a specified tenant of Azure AD).
+  - for users authorization, it perform authentication from the linked _Identity Provider_ (a specified tenant of _Azure Entra ID_).
 - [OpenIdDict.Client.Api](./OpenIdDict.Client.Api) – A Web API app that validates the _access token_ issued by the Auth Gateway (`OpenIdDict.Server`). Contains:
   - Swagger front-end to request the token and run HTTP requests;
   - test API end-points.
 
 # How's it different?
 The key differences:
-- Issues its own _access token_ based on internal rules and confirmed user's identity from an Azure AD tenant.
+- Issues its own _access token_ based on internal rules and confirmed user's identity from an _Azure Entra ID_ tenant.
 - Requires no database.
 - Has minimum code and "magical" behaviour from the packages.

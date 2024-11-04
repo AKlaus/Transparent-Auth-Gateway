@@ -50,7 +50,8 @@ internal static class OpenIdDictEvents
 	internal static Func<OpenIddictServerEvents.ValidateTokenRequestContext, ValueTask> ValidateTokenRequestFunc(AppSettings.AuthCredentialsSettings authSettings) => 
 		validateTokenRequestContext =>
 		{
-			if (!string.Equals(validateTokenRequestContext.ClientId, authSettings.ClientId, StringComparison.OrdinalIgnoreCase))
+			if (validateTokenRequestContext.Request.IsAuthorizationCodeFlow()	// Auth Code Flows must provide a predefined client_id 
+			    && !string.Equals(validateTokenRequestContext.ClientId, authSettings.ClientId, StringComparison.OrdinalIgnoreCase))
 			{
 				validateTokenRequestContext.Reject(
 					error: OpenIddictConstants.Errors.InvalidClient,

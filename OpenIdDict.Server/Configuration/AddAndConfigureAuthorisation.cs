@@ -62,6 +62,7 @@ internal static partial class ServiceCollectionExtensions
 							// Alternatively, these 2 methods can be used: .AddEphemeralEncryptionKey().AddEphemeralSigningKey()
 							.AddDevelopmentEncryptionCertificate()
 							.AddDevelopmentSigningCertificate()
+					// Take it easy and remove the optional token encryption
 							.DisableAccessTokenEncryption();
 
 					// Register scopes.

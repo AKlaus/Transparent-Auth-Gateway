@@ -1,6 +1,7 @@
-using NSwag;
-using NSwag.AspNetCore;
-using NSwag.Generation.Processors.Security;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi.Models;
+using OpenIddict.Validation.AspNetCore;
 
 namespace AK.OAuthSamples.OpenIdDict.Server.Configuration;
 
@@ -8,16 +9,52 @@ internal static partial class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddAndConfigureSwagger(this IServiceCollection services, AppSettings settings)
 	{
-		services.AddEndpointsApiExplorer();
-		services.AddOpenApiDocument(s =>
+		services.AddOpenApi(options =>
+		{
+			options.AddDocumentTransformer((document, _, _) =>
 			{
-				s.Title = settings.AppName;
+				document.Info = new OpenApiInfo { Title = settings.AppName };
+				return Task.CompletedTask;
+			});
+			options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+		});
 
-				s.AddSecurity(
-					Microsoft.Identity.Web.Constants.Bearer,
-					new OpenApiSecurityScheme
+		return services;
+	}
+
+	public static WebApplication ConfigureSwagger(this WebApplication app, AppSettings settings)
+	{
+		app.MapOpenApi();	// Can limit OpenAPI document access to authorized users by calling `RequireAuthorization()`
+		
+		app.UseSwaggerUI(cfg =>
+		{
+			cfg.SwaggerEndpoint("/openapi/v1.json", "v1");
+			cfg.OAuthClientId(settings.Auth.ClientId);
+			cfg.OAuthClientSecret("Cant_be_empty,but_dismissed_anyway");
+			cfg.OAuthUsePkce();
+		});
+
+		return app;
+	}
+
+	/// <summary>
+	///		OpenAPI document transformer to add authentication functionality to the end-points
+	/// </summary>
+	/// <remarks>
+	///		Based on the official example from https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/customize-openapi?view=aspnetcore-9.0#use-document-transformers
+	/// </remarks>
+	private sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
+	{
+		public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancelToken)
+		{
+			var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+			if (authenticationSchemes.Any(scheme => scheme.Name == OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme))
+			{
+				var requirements = new Dictionary<string, OpenApiSecurityScheme>
+				{
+					[Microsoft.Identity.Web.Constants.Bearer] = new()
 					{
-						Type = OpenApiSecuritySchemeType.OAuth2,
+						Type = SecuritySchemeType.OAuth2,
 						Description = "Identity Server auth",
 						Flows = new OpenApiOAuthFlows
 						{
@@ -30,33 +67,23 @@ internal static partial class ServiceCollectionExtensions
 								TokenUrl = GetAuthEndpoint("token"),
 								AuthorizationUrl = GetAuthEndpoint("authorize"),
 								RefreshUrl = GetAuthEndpoint("token"),
-								Scopes = settings.Auth.ScopesFullSet
 							}
 						}
-					});
-				s.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor(Microsoft.Identity.Web.Constants.Bearer));
-			});
-
-		return services;
-	}
-	
-	public static IApplicationBuilder ConfigureSwagger(this IApplicationBuilder app, AppSettings settings)
-	{
-		app.UseOpenApi();
-		app.UseSwaggerUi(cfg =>
-			{
-				cfg.OAuth2Client = new OAuth2ClientSettings
-				{
-					AppName = settings.AppName,
-					ClientId = settings.Auth.ClientId,
-					UsePkceWithAuthorizationCodeGrant = true
+					}
 				};
-				// Set selected scopes by default
-				settings.Auth.ScopesFullSet.Keys.ToList().ForEach(scope => cfg.OAuth2Client.Scopes.Add(scope));
-			});
+				document.Components ??= new OpenApiComponents();
+				document.Components.SecuritySchemes = requirements;
+				// Mark all the end-points with an option to authenticate 
+				foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
+				{
+					operation.Value.Security.Add(new OpenApiSecurityRequirement
+					{
+						[new OpenApiSecurityScheme { Reference = new OpenApiReference { Id = Microsoft.Identity.Web.Constants.Bearer, Type = ReferenceType.SecurityScheme } }] = Array.Empty<string>()
+					});
+				}
+			}
+		}
 
-		return app;
+		private static Uri GetAuthEndpoint(string endpointSuffix) => new($"/connect/{endpointSuffix}", UriKind.Relative);
 	}
-
-	private static string GetAuthEndpoint(string endpointSuffix) => $"/connect/{endpointSuffix}";
 }

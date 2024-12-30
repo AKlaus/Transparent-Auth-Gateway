@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <Features>strict</Features>
@@ -13,10 +13,10 @@
         <AssemblyName>AK.OAuthSamples.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>AK.OAuthSamples.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
         <UserSecretsId>AK.OAuthSamples</UserSecretsId>
-        
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     </ItemGroup>
 </Project>

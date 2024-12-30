@@ -101,10 +101,16 @@ internal static partial class ServiceCollectionExtensions
 					{	// Incorrect /signin-oidc requests
 						OnRemoteFailure = async context =>
 						{
+							var extractedMsg = string.Empty;
+							if (context.Response.StatusCode == (int)System.Net.HttpStatusCode.Forbidden) {
+								var wwwAuthenticate = context.Response.Headers.WWWAuthenticate;
+								extractedMsg = string.Join(". ", wwwAuthenticate.Select(a=>a));
+							}
 							// Without this handler an exception will be thrown on sending a simple `curl --request POST 'https://LOCALHOST/signin-oidc'` 
 							// NOTE: Add logging of the exception to the log sink
 							await context.Request.HttpContext.ForbidAsync();
-							await context.Response.WriteAsync("Incorrect response from Azure Entra ID");
+							await context.Response.WriteAsync("Incorrect response from Azure Entra ID. "+extractedMsg);
+							//context.Response.Cookies.Delete();
 							context.HandleResponse();
 						}
 					};

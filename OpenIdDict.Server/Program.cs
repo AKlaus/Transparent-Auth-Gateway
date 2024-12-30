@@ -15,22 +15,23 @@ if (isLocal)
 var settings = builder.Services.AddAndConfigureAppSettings(builder.Configuration);
 	
 // Configuring the IoC/DI container
-builder.Services.AddAndConfigureSwagger(settings)
-				.AddCors()
+if (isLocal)
+	builder.Services.AddAndConfigureSwagger(settings);
+
+builder.Services.AddCors()
 				.AddAndConfigureAuthorisation(settings);
 
 // Building the middleware pipeline
 var app = builder.Build();
 
 if (isLocal)
-	app.UseDeveloperExceptionPage();
+{
+	app	.ConfigureSwagger(settings)		// Swagger is available in DEV only
+		.UseDeveloperExceptionPage();
+}
 
-app	.UseHttpsRedirection();
-
-if (isLocal)
-	app.ConfigureSwagger(settings);	// Swagger is available in DEV only
-
-app	.UseCors (policyBuilder => 
+app	.UseHttpsRedirection()
+	.UseCors (policyBuilder => 
 			  policyBuilder .AllowAnyOrigin()
 							.AllowAnyMethod()
 							.AllowAnyHeader())
